@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Capi tienda de Gaby</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink-bg: #f7c9dc;
+    --pink-bg-2: #f3b8d0;
+    --pink-card: #fdf1f6;
+    --pink-hot: #ec4f8f;
+    --pink-hot-dark: #d63a79;
+    --pink-mid: #f386b0;
+    --brown: #6b4128;
+    --brown-soft: #8a5a3c;
+    --cream: #fff8fb;
+    --line: #f3c6da;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Nunito', sans-serif;
+    color:var(--brown);
+    background-color: var(--pink-bg);
+    background-image:
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.35) 0 2px, transparent 2px 34px),
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.35) 0 2px, transparent 2px 34px),
+      repeating-linear-gradient(0deg, var(--pink-bg-2) 0 17px, transparent 17px 34px),
+      repeating-linear-gradient(90deg, var(--pink-bg-2) 0 17px, transparent 17px 34px);
+    min-height:100vh;
+    padding-bottom:100px;
+  }
+  .wrap{max-width:640px;margin:0 auto;padding:22px 16px 10px;position:relative;}
+
+  /* floating hearts */
+  .heart{position:absolute;opacity:.85;pointer-events:none;}
+  .heart svg{display:block;filter:drop-shadow(0 2px 3px rgba(0,0,0,.08));}
+
+  header{
+    background:var(--cream);
+    border-radius:32px;
+    padding:28px 20px 22px;
+    text-align:center;
+    position:relative;
+    box-shadow:0 8px 0 rgba(214,58,121,0.12), 0 14px 30px rgba(214,58,121,0.15);
+    border:3px solid #fff;
+  }
+  .mascot{font-size:64px;line-height:1;margin-bottom:2px;}
+  h1{
+    font-family:'Baloo 2', sans-serif;
+    font-size:44px;
+    line-height:0.95;
+    margin:2px 0 0;
+    color:var(--pink-hot);
+    text-shadow: 2px 2px 0 rgba(107,65,40,0.12);
+  }
+  h1 span{display:block;color:var(--brown);font-size:40px;}
+  .ribbon{
+    display:inline-block;
+    margin-top:12px;
+    background:linear-gradient(180deg,var(--pink-hot),var(--pink-hot-dark));
+    color:#fff;
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    font-size:19px;
+    padding:8px 26px;
+    border-radius:999px;
+    box-shadow:0 4px 0 var(--pink-hot-dark);
+    letter-spacing:.3px;
+  }
+  .tagline{
+    margin-top:14px;
+    font-weight:700;
+    color:var(--brown-soft);
+    font-size:15px;
+  }
+
+  .section-title{
+    text-align:center;
+    margin:26px 0 16px;
+  }
+  .section-title .ribbon{font-size:21px;padding:9px 30px;}
+
+  .products{
+    background:var(--pink-card);
+    border-radius:26px;
+    border:3px solid #fff;
+    box-shadow:0 6px 0 rgba(214,58,121,0.10), 0 12px 26px rgba(214,58,121,0.12);
+    padding:8px 14px;
+  }
+  .product{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:14px 4px;
+    border-bottom:2px dashed var(--line);
+  }
+  .product:last-child{border-bottom:none;}
+  .icon{
+    width:56px;height:56px;flex:none;
+    border-radius:16px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:26px;
+    box-shadow: inset 0 -3px 0 rgba(0,0,0,0.08);
+  }
+  .info{flex:1;min-width:0;}
+  .name{font-weight:800;font-size:16.5px;color:var(--brown);}
+  .price{font-family:'Baloo 2';color:var(--pink-hot);font-weight:700;font-size:15.5px;margin-top:2px;}
+  .price b{font-size:19px;}
+
+  .qty-controls{
+    display:flex;align-items:center;gap:8px;flex:none;
+  }
+  .qty-btn{
+    width:32px;height:32px;border-radius:50%;
+    border:none;background:var(--pink-hot);color:#fff;
+    font-size:18px;font-weight:800;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 2px 0 var(--pink-hot-dark);
+    user-select:none;
+  }
+  .qty-btn:active{transform:translateY(2px);box-shadow:none;}
+  .qty-btn.add-first{
+    width:auto;border-radius:999px;padding:0 16px;height:34px;font-size:14px;font-family:'Baloo 2';
+  }
+  .qty-num{min-width:20px;text-align:center;font-weight:800;font-family:'Baloo 2';font-size:16px;}
+
+  footer.note{
+    text-align:center;margin-top:26px;color:var(--brown-soft);font-weight:700;font-size:14px;
+  }
+  .bear-row{display:flex;justify-content:center;font-size:40px;margin-top:10px;}
+
+  /* cart bar */
+  .cartbar{
+    position:fixed;left:0;right:0;bottom:0;
+    display:flex;justify-content:center;
+    padding:14px 16px calc(14px + env(safe-area-inset-bottom));
+    background:linear-gradient(180deg, rgba(247,201,220,0) 0%, rgba(243,184,208,0.95) 30%);
+    pointer-events:none;
+  }
+  .cartbtn{
+    pointer-events:auto;
+    background:linear-gradient(180deg,var(--pink-hot),var(--pink-hot-dark));
+    color:#fff;border:none;
+    font-family:'Baloo 2';font-size:17px;font-weight:700;
+    padding:14px 22px;border-radius:999px;
+    box-shadow:0 6px 0 var(--pink-hot-dark), 0 12px 22px rgba(214,58,121,0.35);
+    display:flex;align-items:center;gap:10px;
+    max-width:520px;width:100%;justify-content:center;
+    cursor:pointer;
+  }
+  .cartbtn .badge{
+    background:#fff;color:var(--pink-hot-dark);
+    border-radius:999px;min-width:24px;height:24px;padding:0 6px;
+    display:flex;align-items:center;justify-content:center;font-size:14px;
+  }
+  .cartbtn:disabled{opacity:.55;box-shadow:none;}
+
+  /* cart modal */
+  .overlay{
+    position:fixed;inset:0;background:rgba(107,65,40,0.35);
+    display:none;align-items:flex-end;justify-content:center;z-index:50;
+  }
+  .overlay.open{display:flex;}
+  .sheet{
+    width:100%;max-width:640px;background:var(--cream);
+    border-radius:28px 28px 0 0;
+    padding:20px 18px calc(20px + env(safe-area-inset-bottom));
+    max-height:82vh;overflow-y:auto;
+    box-shadow:0 -10px 30px rgba(0,0,0,0.2);
+  }
+  .sheet-title{
+    font-family:'Baloo 2';font-size:24px;color:var(--pink-hot-dark);
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .sheet-title button{
+    background:none;border:none;font-size:22px;color:var(--brown-soft);cursor:pointer;
+  }
+  .cart-item{
+    display:flex;align-items:center;gap:10px;
+    padding:12px 0;border-bottom:2px dashed var(--line);
+  }
+  .cart-item .info{flex:1;}
+  .cart-item .name{font-size:15px;}
+  .cart-item .sub{font-size:13px;color:var(--brown-soft);font-weight:700;}
+  .cart-total{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:16px 4px 4px;font-family:'Baloo 2';font-size:20px;color:var(--brown);
+  }
+  .cart-total b{color:var(--pink-hot);font-size:24px;}
+  .whatsapp-btn{
+    width:100%;margin-top:14px;
+    background:#25D366;color:#fff;border:none;
+    font-family:'Baloo 2';font-size:17px;font-weight:700;
+    padding:14px;border-radius:999px;
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    box-shadow:0 5px 0 #1aa851;cursor:pointer;
+  }
+  .whatsapp-btn:active{transform:translateY(3px);box-shadow:none;}
+  .empty-cart{text-align:center;padding:30px 10px;color:var(--brown-soft);font-weight:700;}
+
+  @media (max-width:380px){
+    h1{font-size:36px;}
+    h1 span{font-size:32px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <div class="heart" style="top:-10px;left:-4px;">💗</div>
+    <div class="heart" style="top:6px;right:2px;font-size:20px;">💕</div>
+    <div class="mascot">🦫🩷</div>
+    <h1>La Capi<span>tienda</span></h1>
+    <div class="ribbon">♥ de Gaby ♥</div>
+    <div class="tagline">¡Productos que te hacen sonreír! 💗</div>
+  </header>
+
+  <div class="section-title">
+    <div class="ribbon">♥ PRODUCTOS ♥</div>
+  </div>
+
+  <div class="products" id="productList"></div>
+
+  <footer class="note">
+    Hecho con amor 💗 — ¡Vuelve pronto, te esperamos!
+    <div class="bear-row">🦫</div>
+  </footer>
+</div>
+
+<div class="cartbar">
+  <button class="cartbtn" id="openCartBtn" disabled>
+    🛒 Ver carrito <span class="badge" id="cartCount">0</span>
+  </button>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="sheet">
+    <div class="sheet-title">
+      Tu carrito 🛍️
+      <button id="closeCartBtn">✕</button>
+    </div>
+    <div id="cartItems"></div>
+    <div class="cart-total">
+      <span>Total</span>
+      <b id="cartTotal">$0</b>
+    </div>
+    <button class="whatsapp-btn" id="sendBtn">
+      📲 Enviar pedido por WhatsApp
+    </button>
+  </div>
+</div>
+
+<script>
+const WHATSAPP_NUMBER = "573113757610";
+
+const products = [
+  {id:1, name:"Bon bon bum", price:800,  icon:"🍭", bg:"#ffd7d7"},
+  {id:2, name:"Piazza jirafa", price:1000, icon:"🍫", bg:"#ffe3b0"},
+  {id:3, name:"Nucita crema", price:1200, icon:"🍯", bg:"#ffe9a8"},
+  {id:4, name:"Oka locka", price:2600, icon:"🍬", bg:"#e3d3ff"},
+  {id:5, name:"Chocolores", price:2200, icon:"🍡", bg:"#ffd0e6"},
+  {id:6, name:"Chocobreak", price:500,  icon:"🍪", bg:"#f0c8b0"},
+  {id:7, name:"Gomitas osos", price:700,  icon:"🐻", bg:"#c9f0d0"},
+  {id:8, name:"Mentas chao", price:1500, icon:"💊", bg:"#bfe8ea"},
+];
+
+let cart = {}; // id -> qty
+
+function money(n){
+  return "$" + n.toLocaleString("es-CO") + " pesos";
+}
+
+function renderProducts(){
+  const list = document.getElementById('productList');
+  list.innerHTML = products.map(p => `
+    <div class="product">
+      <div class="icon" style="background:${p.bg}">${p.icon}</div>
+      <div class="info">
+        <div class="name">${p.name}</div>
+        <div class="price"><b>${p.price.toLocaleString('es-CO')}</b> pesos</div>
+      </div>
+      <div class="qty-controls" id="ctrl-${p.id}">
+        ${cart[p.id] ? `
+          <button class="qty-btn" onclick="changeQty(${p.id}, -1)">−</button>
+          <span class="qty-num">${cart[p.id]}</span>
+          <button class="qty-btn" onclick="changeQty(${p.id}, 1)">+</button>
+        ` : `
+          <button class="qty-btn add-first" onclick="changeQty(${p.id}, 1)">Añadir</button>
+        `}
+      </div>
+    </div>
+  `).join('');
+}
+
+function changeQty(id, delta){
+  const current = cart[id] || 0;
+  const next = current + delta;
+  if(next <= 0){
+    delete cart[id];
+  } else {
+    cart[id] = next;
+  }
+  renderProducts();
+  renderCartBar();
+}
+
+function cartCount(){
+  return Object.values(cart).reduce((a,b)=>a+b, 0);
+}
+function cartTotal(){
+  return Object.entries(cart).reduce((sum,[id,qty])=>{
+    const p = products.find(x=>x.id==id);
+    return sum + p.price*qty;
+  }, 0);
+}
+
+function renderCartBar(){
+  const count = cartCount();
+  document.getElementById('cartCount').textContent = count;
+  document.getElementById('openCartBtn').disabled = count === 0;
+}
+
+function renderCartSheet(){
+  const items = Object.entries(cart);
+  const box = document.getElementById('cartItems');
+  if(items.length === 0){
+    box.innerHTML = `<div class="empty-cart">Tu carrito está vacío 🐹<br>¡Añade algo dulce!</div>`;
+  } else {
+    box.innerHTML = items.map(([id,qty]) => {
+      const p = products.find(x=>x.id==id);
+      return `
+        <div class="cart-item">
+          <div class="icon" style="background:${p.bg};width:44px;height:44px;font-size:20px;">${p.icon}</div>
+          <div class="info">
+            <div class="name">${p.name}</div>
+            <div class="sub">${qty} x ${p.price.toLocaleString('es-CO')} = ${money(p.price*qty)}</div>
+          </div>
+          <div class="qty-controls">
+            <button class="qty-btn" onclick="changeQty(${p.id}, -1); renderCartSheet();">−</button>
+            <span class="qty-num">${qty}</span>
+            <button class="qty-btn" onclick="changeQty(${p.id}, 1); renderCartSheet();">+</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+  document.getElementById('cartTotal').textContent = money(cartTotal()).replace(' pesos','');
+}
+
+document.getElementById('openCartBtn').addEventListener('click', () => {
+  renderCartSheet();
+  document.getElementById('overlay').classList.add('open');
+});
+document.getElementById('closeCartBtn').addEventListener('click', () => {
+  document.getElementById('overlay').classList.remove('open');
+});
+document.getElementById('overlay').addEventListener('click', (e) => {
+  if(e.target.id === 'overlay') document.getElementById('overlay').classList.remove('open');
+});
+
+document.getElementById('sendBtn').addEventListener('click', () => {
+  const items = Object.entries(cart);
+  if(items.length === 0) return;
+  let msg = "¡Hola! 💗 Quiero hacer un pedido en *La Capi tienda de Gaby*:\n\n";
+  items.forEach(([id,qty]) => {
+    const p = products.find(x=>x.id==id);
+    msg += `• ${p.name} x${qty} — ${money(p.price*qty)}\n`;
+  });
+  msg += `\nTotal: *${money(cartTotal())}*\n\n¡Gracias! 🦫🩷`;
+  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+});
+
+renderProducts();
+renderCartBar();
+</script>
+
+</body>
+</html>
